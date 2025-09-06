@@ -38,7 +38,7 @@ const InitialChat = (
   return (
       <div className="relative h-screen w-full flex justify-center items-center bg-white">
         <div className="w-150">
-          <TitleLogo title="ChatBot" />
+          <TitleLogo title="ChatBotTemplate" />
           <ChatForm
             messageList={messageList}
             setMessageList={setMessageList}
