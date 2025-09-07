@@ -1,9 +1,3 @@
-export interface ChatMessage {
-  message: string;
-  user: "assistant" | "user" | "system" | "tool";
-  loading?: boolean;
-}
-
 export type StreamEvent =
   | { type: "token"; content: string }
   | { type: "tool_start"; tool: string }

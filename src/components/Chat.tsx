@@ -3,7 +3,7 @@ import ChatForm from "@/components/ChatForm";
 import ChatMessage from "@/components/ChatMessage";
 import InitialChat from "@/components/InitialChat";
 import { useRef, useEffect } from "react";
-import { ChatMessage as ChatMessageType } from "@/lib/chatApi";
+import { ChatMessage as ChatMessageType } from "@/lib/types";
 import Header from "./Header";
 
 const Chat = (

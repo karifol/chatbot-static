@@ -1,7 +1,7 @@
 import React from 'react'
 import TitleLogo from './TitleLogo'
 import ChatForm from './ChatForm'
-import { ChatMessage } from '@/lib/chatApi';
+import { ChatMessage } from '@/lib/types'
 import ChatSuggest from './ChatSuggest';
 import Header from './Header';
 

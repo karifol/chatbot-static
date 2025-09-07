@@ -1,7 +1,7 @@
 'use client';
 import Chat from "@/components/Chat";
 import Sidebar from "@/components/Sidebar";
-import { ChatMessage } from "@/lib/chatApi";
+import { ChatMessage } from "@/lib/types";
 import { useState } from "react";
 
 const ChatTypePage = () => {

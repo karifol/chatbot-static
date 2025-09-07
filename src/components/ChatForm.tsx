@@ -3,7 +3,7 @@ import { useState, useRef } from 'react';
 import { Textarea } from "@/components/Textarea";
 import { Button } from '@/components/ui/button';
 import { LoaderCircle, Send } from 'lucide-react';
-import { ChatMessage } from '@/lib/chatApi';
+import { ChatMessage } from '@/lib/types';
 import { callChatApiStream } from '@/lib/chatApi';
 
 const ChatForm = ({
