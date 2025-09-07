@@ -13,7 +13,6 @@ const Sidebar = () => {
         <SlNote className="inline-block mr-2"/>
         チャットをリセット
       </button>
-
     </div>
   )
 }

@@ -7,8 +7,10 @@ import { ChatMessage as ChatMessageType } from "@/lib/types";
 import Header from "./Header";
 
 const Chat = (
-  { messageList, setMessageList }:
-  { messageList: ChatMessageType[]; setMessageList: React.Dispatch<React.SetStateAction<ChatMessageType[]>> }
+  { messageList, setMessageList}: {
+    messageList: ChatMessageType[];
+    setMessageList: React.Dispatch<React.SetStateAction<ChatMessageType[]>>;
+  }
 ) => {
 
   // スクロール用ref
@@ -45,13 +47,10 @@ const Chat = (
       </div>
 
     ) : (
-      <>
-        <InitialChat
-          messageList={messageList}
-          setMessageList={setMessageList}
-        />
-      </>
-
+      <InitialChat
+        messageList={messageList}
+        setMessageList={setMessageList}
+      />
     )
   );
 };

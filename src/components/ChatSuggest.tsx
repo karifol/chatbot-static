@@ -5,7 +5,7 @@ interface ChatSuggestProps {
 const SUGGESTS = [
   "使い方を教えてください",
   "明日の天気は？",
-  "小説を書いて",
+  "ツール一覧を見せて",
 ];
 
 const ChatSuggest: React.FC<ChatSuggestProps> = ({ onSuggestClick }) => {
