@@ -14,12 +14,12 @@ const ChatTypePage = () => {
   ]);
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full w-full">
         <div className="hidden lg:w-1/5 lg:block">
           <Sidebar></Sidebar>
         </div>
         <main className="bg-white w-full lg:w-4/5">
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full w-full">
             <Chat
               messageList={MessageList}
               setMessageList={setMessageList}

@@ -3,6 +3,7 @@ import TitleLogo from './TitleLogo'
 import ChatForm from './ChatForm'
 import { ChatMessage } from '@/lib/chatApi';
 import ChatSuggest from './ChatSuggest';
+import Header from './Header';
 
 const InitialChat = (
   { messageList, setMessageList }:
@@ -36,7 +37,9 @@ const InitialChat = (
   };
 
   return (
-      <div className="relative h-screen w-full flex justify-center items-center bg-white">
+    <div className="h-screen w-full flex flex-col">
+      <Header />
+      <div className="relative h-full w-full flex justify-center items-center bg-white">
         <div className="w-150">
           <TitleLogo title="ChatBotTemplate" />
           <ChatForm
@@ -46,6 +49,7 @@ const InitialChat = (
           <ChatSuggest onSuggestClick={handleSuggestClick} />
         </div>
       </div>
+    </div>
   )
 }
 

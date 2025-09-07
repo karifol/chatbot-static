@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Textarea } from "@/components/Textarea";
 import { Button } from '@/components/ui/button';
 import { LoaderCircle, Send } from 'lucide-react';
@@ -15,6 +15,7 @@ const ChatForm = ({
 }) => {
   const [input, setInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSend = async () => {
     if (isSubmitting) return;
@@ -23,6 +24,11 @@ const ChatForm = ({
 
     setIsSubmitting(true);
     setInput("");
+    // TextAreaの高さをリセット
+    if (textareaRef.current) {
+      textareaRef.current.rows = 1;
+      textareaRef.current.style.height = ""; // 自動リサイズ対応の場合
+    }
 
     // ユーザーメッセージ + 空のAIメッセージを追加
     setMessageList((prev) => [
@@ -107,18 +113,20 @@ const ChatForm = ({
   };
 
   return (
-    <div className="p-3 w-full">
-      <div className="flex justify-between gap-2 bg-gray-100 rounded-2xl p-2">
+    <div className="p-3 w-full min-h-20">
+      <div className="flex justify-between items-center gap-2 rounded-4xl p-2 border border-gray-300 shadow-sm">
         <Textarea
+          ref={textareaRef}
           placeholder="メッセージを入力して下さい..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={isSubmitting}
+          rows={1}
         />
         <Button
           type="button"
-          className="flex items-center bg-gray-400 hover:bg-gray-500 h-[44px] min-h-[44px] px-4"
+          className="flex items-center bg-gray-400 hover:bg-gray-500 h-[44px] min-h-[44px] px-4 hover:cursor-pointer rounded-full"
           style={{
             textShadow:
               "0 1px 4px rgba(0,0,0,0.25), 0 0px 1px rgba(0,0,0,0.15)"
@@ -132,6 +140,7 @@ const ChatForm = ({
             <Send size={16} />
           )}
         </Button>
+
       </div>
     </div>
   );
