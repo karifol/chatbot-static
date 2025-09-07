@@ -1,12 +1,18 @@
 import ReactMarkdown from "react-markdown"
 import ChatCopyButton from "@/components/ChatCopyButton";
 import ChatEvaluateButton from "@/components/ChatEvaluateButton";
+import { RiRobot3Line } from "react-icons/ri";
 
 const AssistantMessage = ({ message }: { message: string }) => {
 
   return (
     <div className="flex items-start gap-2 my-2">
-      <div className="markdown-body">
+      {/* アイコン */}
+      <div className="w-15 h-15 rounded-full bg-white border-2 flex items-center justify-center mt-1">
+        <RiRobot3Line className="text-3xl" />
+      </div>
+      {/* メッセージ */}
+      <div className="markdown-body w-[calc(100%-3rem)]">
         <ReactMarkdown>{message}</ReactMarkdown>
         {/* 評価ボタン */}
         <div className="flex gap-2 mt-2">

@@ -34,7 +34,7 @@ const ChatForm = ({
     setMessageList((prev) => [
       ...prev,
       { message, user: "user" },
-      { message: "", user: "assistant" }
+      { "message": "", user: "assistant" }
     ]);
 
     try {
