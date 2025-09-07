@@ -10,7 +10,7 @@ const ChatTypePage = () => {
   const [MessageList, setMessageList] = useState<ChatMessage[]>([
     {
       user: "system",
-      message: "あなたは親切でフレンドリーなアシスタントです。"
+      message: "あなたは、有能なアシスタントです。"
     },
   ]);
 

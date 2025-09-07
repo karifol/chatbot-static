@@ -40,7 +40,7 @@ const ChatForm = ({
     try {
       // 履歴を生成（system/toolは除外）
       const history = messageList
-        .filter(m => m.user !== "system" && m.user !== "tool")
+        .filter(m => m.user !== "tool")
         .map(m => ({
           role: m.user === "user" ? "user" : "assistant",
           content: m.message
