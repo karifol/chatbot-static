@@ -14,9 +14,11 @@ const ChatEvaluateButton = () => {
         onMouseLeave={() => setHovered(null)}
         className="relative px-2 py-1 hover:cursor-pointer hover:bg-gray-200 p-2 rounded"
       >
-        <FiThumbsUp />
+        <FiThumbsUp
+          className="text-gray-600"
+        />
         {hovered === "good" && (
-          <span className="absolute left-1/2 top-8 -translate-x-1/2 bg-gray-700 text-white text-xs w-20 rounded shadow">
+          <span className="absolute left-1/2 top-8 -translate-x-1/2 bg-gray-700 text-white text-xs w-20 rounded shadow p-1">
             良い回答です
           </span>
         )}
@@ -27,9 +29,11 @@ const ChatEvaluateButton = () => {
         onMouseLeave={() => setHovered(null)}
         className="relative px-2 py-1 hover:cursor-pointer hover:bg-gray-200 p-2 rounded"
       >
-        <FiThumbsDown />
+        <FiThumbsDown
+          className="text-gray-600"
+        />
         {hovered === "bad" && (
-          <span className="absolute left-1/2 top-8 -translate-x-1/2 bg-gray-700 text-white text-xs w-23 rounded shadow">
+          <span className="absolute left-1/2 top-8 -translate-x-1/2 bg-gray-700 text-white text-xs w-25 rounded shadow p-1">
             良くない回答です
           </span>
         )}

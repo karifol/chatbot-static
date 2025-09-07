@@ -25,10 +25,10 @@ const ChatCopyButton = ({ message }: { message: string }) => {
     >
       {copied ?
         <FaCheck className="text-green-500 text-xl" /> :
-        <PiCopy className="text-xl" />
+        <PiCopy className="text-xl text-gray-600" />
       }
       {isCopyHovered && !copied && (
-        <span className="absolute left-1/2 top-8 -translate-x-1/2 bg-gray-700 text-white text-xs w-15 rounded shadow">
+        <span className="absolute left-1/2 top-8 -translate-x-1/2 bg-gray-700 text-white text-xs w-15 rounded shadow p-1">
           コピーする
         </span>
       )}
