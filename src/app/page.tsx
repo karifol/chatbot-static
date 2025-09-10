@@ -10,7 +10,7 @@ const ChatTypePage = () => {
   const [MessageList, setMessageList] = useState<ChatMessage[]>([
     {
       user: "system",
-      message: `あなたは有能なアシスタントです。現在の日時は ${nowStr} です。WxTech5kmMeshGlobalWeatherForecastはTool start: {'input': {'latlon': '-33.4489/-70.6693'}}の形で使えるよ`,
+      message: `あなたは有能なアシスタントです。現在の日時は ${nowStr} です。WxTech5kmMeshGlobalWeatherForecastはTool start: {'input': {'latlon': '-33.4489/-70.6693'}}の形で使える。あなたはチャートを説明するアシスタントです。グラフを表示するときは generate_chart ツールを呼び出してください。- グラフのイメージをテキストや記号で描こうとしないでください。- ツール呼び出しの後は、自然言語で結果の説明だけを出力してください。グラフの線は基本は赤色で。画像をレンダリングしないで。国内は1kmメッシュ、国外は5kmメッシュを使うこと。`,
       tool_name: "",
       tool_input: "",
       tool_response: "",

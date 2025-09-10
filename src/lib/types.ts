@@ -1,6 +1,7 @@
 // チャットメッセージ
 export interface ChatMessage {
-  user: "assistant" | "user" | "system" | "tool_start" | "tool_end";
+  chart?: string | object;
+  user: "assistant" | "user" | "system" | "tool_start" | "tool_end" | "chart";
   message: string;
   loading?: boolean;
   tool_name: string;

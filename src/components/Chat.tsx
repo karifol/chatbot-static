@@ -35,7 +35,7 @@ const Chat = (
         const tool_id = msg.tool_id;
         toolMessageMap[tool_id] = newMessageList.length;
         newMessageList.push(msg);
-      } else if (msg.user === "tool_end") {
+      } else if (msg.user === "tool_end" || msg.user === "chart") {
         const tool_id = msg.tool_id;
         const startIndex = toolMessageMap[tool_id];
         if (startIndex !== undefined) {
@@ -43,6 +43,9 @@ const Chat = (
             ...newMessageList[startIndex],
             tool_response: msg.tool_response,
           };
+        }
+        if (msg.user === "chart") {
+          newMessageList.push(msg);
         }
         // tool_end自体はnewMessageListに追加しない
       } else {
@@ -68,6 +71,7 @@ const Chat = (
                 tool_name={item.tool_name}
                 tool_input={item.tool_input}
                 tool_response={item.tool_response}
+                chart={item.chart}
               />
             ))}
           </div>

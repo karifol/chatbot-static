@@ -2,9 +2,11 @@ import UserMessage from './UserMessage';
 import AssistantMessage from './AssistantMessage';
 import SystemMessage from './SystemMessage';
 import ToolMessage from './ToolMessage';
+import ChartMessage from './ChartMessage';
+import { text } from 'stream/consumers';
 
-const ChatMessage = ({ message, user, tool_name, tool_input, tool_response}:
-  { message: string; user: string; tool_name: string; tool_input: string | object; tool_response: string | object;}
+const ChatMessage = ({ message, user, tool_name, tool_input, tool_response, chart}:
+  { message: string; user: string; tool_name: string; tool_input: string | object; tool_response: string | object; chart: string | object | undefined }
 ) => {
 
   // オブジェクトの場合はJSON.stringifyで表示
@@ -14,6 +16,7 @@ const ChatMessage = ({ message, user, tool_name, tool_input, tool_response}:
     }
     return value;
   };
+
   if (user === "user") {
     return <UserMessage message={renderValue(message)} />;
   }
@@ -26,6 +29,10 @@ const ChatMessage = ({ message, user, tool_name, tool_input, tool_response}:
       tool_input={renderValue(tool_input)}
       tool_response={renderValue(tool_response)}
     />;
+  }
+  if (user === "chart") {
+    if (chart === undefined) return null;
+    return <ChartMessage chart={renderValue(chart)} />;
   }
   if (user === "system") {
     return <SystemMessage message={renderValue(message)} />;

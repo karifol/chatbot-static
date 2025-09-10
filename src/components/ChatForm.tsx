@@ -54,7 +54,7 @@ const ChatForm = ({
     try {
       // 履歴を生成（system/toolは除外）
       const history = messageList
-        .filter(m => m.user !== "tool_start" && m.user !== "tool_end")
+        .filter(m => m.user !== "tool_start" && m.user !== "tool_end" && m.user !== "chart")
         .map(m => ({
           role: m.user === "user" ? "user" : "assistant",
           content: m.message
@@ -108,6 +108,27 @@ const ChatForm = ({
                   tool_input: "",
                   tool_response: event.tool_response,
                   tool_id: event.tool_id
+                });
+                break;
+
+              case "chart":
+                // tool_endとchartを連続で格納
+                newList.splice(realIndex, 0, {
+                  user: "tool_end",
+                  message: '',
+                  tool_name: event.tool_name,
+                  tool_input: "",
+                  tool_response: event.tool_response,
+                  tool_id: event.tool_id
+                });
+                newList.splice(realIndex + 1, 0, {
+                  user: "chart",
+                  message: '',
+                  chart: event.chart,
+                  tool_name: "",
+                  tool_input: "",
+                  tool_response: "",
+                  tool_id: ""
                 });
                 break;
 

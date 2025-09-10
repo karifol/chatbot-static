@@ -13,10 +13,18 @@ export type StreamEvent =
     tool_response: string;
     tool_id: string;
   }
+  | {
+    type: "chart";
+    tool_name: string;
+    tool_response: string;
+    tool_id: string;
+    chart: string | object;
+  }
   | { type: "final"; content: string }
   | { type: "end" };
 
-const CHATBOT_ENDPOINT = "http://13.158.134.151:80/chat"; // for local test
+// const CHATBOT_ENDPOINT = "http://13.158.134.151:80/chat"; // for local test
+const CHATBOT_ENDPOINT = "http://localhost:8080/chat"; // for local test
 
 /**
  * ストリーミングでチャットAPIを呼び出す
@@ -27,8 +35,6 @@ export async function callChatApiStream(
   messages: { role: string; content: string }[],
   onEvent: (event: StreamEvent) => void
 ) {
-
-  console.log("Calling chat API with messages:", messages);
 
   const response = await fetch(CHATBOT_ENDPOINT, {
     method: "POST",
@@ -61,9 +67,6 @@ export async function callChatApiStream(
       if (line.startsWith("data: ")) {
         try {
           const data = JSON.parse(line.replace("data: ", ""));
-          if (data.type === "tool_end") {
-            console.log("Received event:", data);
-          }
           onEvent(data);
         } catch (err) {
           console.error("JSON parse error:", err, line);
