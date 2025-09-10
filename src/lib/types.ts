@@ -1,8 +1,12 @@
 // チャットメッセージ
 export interface ChatMessage {
+  user: "assistant" | "user" | "system" | "tool_start" | "tool_end";
   message: string;
-  user: "assistant" | "user" | "system" | "tool";
   loading?: boolean;
+  tool_name: string;
+  tool_input: string;
+  tool_response: string;
+  tool_id: string;
 }
 
 // チャットセッション

@@ -2,12 +2,12 @@ import ReactMarkdown from "react-markdown"
 import ChatCopyButton from "@/components/ChatCopyButton";
 import ChatEvaluateButton from "@/components/ChatEvaluateButton";
 import { RiRobot3Line } from "react-icons/ri";
-import { LoaderCircle } from "lucide-react"; // 追加
+import { LoaderCircle } from "lucide-react";
 
 const AssistantMessage = ({ message }: { message: string }) => {
 
   return (
-    <div className="flex items-start gap-2 my-2">
+    <div className="flex items-start gap-2 my-5">
       {/* アイコン */}
       <div className="w-15 h-15 rounded-full bg-white border-2 flex items-center justify-center mt-1">
         <RiRobot3Line className="text-3xl" />

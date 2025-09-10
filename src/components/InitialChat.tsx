@@ -13,14 +13,14 @@ const InitialChat = (
   // サジェストクリック時のAPI呼び出し
   const handleSuggestClick = async (text: string) => {
     // ユーザーメッセージ追加
-    setMessageList(prev => [...prev, { message: text, user: "user" }]);
+    setMessageList(prev => [...prev, { message: text, user: "user", tool_name: "", tool_input: "", tool_response: "", tool_id: "" }]);
     // API呼び出し
     const messages = [
       ...messageList.map(m => ({ role: m.user, content: m.message })),
       { role: "user", content: text }
     ];
     // 一時的にローディングメッセージ追加
-    setMessageList(prev => [...prev, { message: "", user: "assistant", loading: true }]);
+    setMessageList(prev => [...prev, { message: "", user: "assistant", loading: true, tool_name: "", tool_input: "", tool_response: "", tool_id: "" }]);
     let assistantMessage = "";
     const { callChatApiStream } = await import("@/lib/chatApi");
     await callChatApiStream(messages, (event) => {
@@ -29,7 +29,7 @@ const InitialChat = (
         setMessageList(prev => {
           // 最後のassistant(loading)を置き換え
           const updated = [...prev];
-          updated[updated.length - 1] = { message: assistantMessage, user: "assistant", loading: false };
+          updated[updated.length - 1] = { message: assistantMessage, user: "assistant", loading: false, tool_name: "", tool_input: "", tool_response: "", tool_id: "" };
           return updated;
         });
       }

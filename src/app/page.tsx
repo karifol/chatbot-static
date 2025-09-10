@@ -1,60 +1,22 @@
 'use client';
 import Chat from "@/components/Chat";
 import Sidebar from "@/components/Sidebar";
-import { ChatMessage, ChatSession } from "@/lib/types";
-import { useEffect, useState } from "react";
+import { ChatMessage } from "@/lib/types";
+import { useState } from "react";
 
 const ChatTypePage = () => {
-  const [sessions, setSessions] = useState<ChatSession[]>([]);
-  const [currentId, setCurrentId] = useState<string | null>(null);
+  const now = Date.now();
+  const nowStr = new Date(now).toLocaleString();
   const [MessageList, setMessageList] = useState<ChatMessage[]>([
     {
       user: "system",
-      message: "あなたは、有能なアシスタントです。"
+      message: `あなたは有能なアシスタントです。現在の日時は ${nowStr} です。WxTech5kmMeshGlobalWeatherForecastはTool start: {'input': {'latlon': '-33.4489/-70.6693'}}の形で使えるよ`,
+      tool_name: "",
+      tool_input: "",
+      tool_response: "",
+      tool_id: ""
     },
   ]);
-
-    // 起動時に localStorage から復元
-  useEffect(() => {
-    const saved = localStorage.getItem("chat_sessions");
-    if (saved) {
-      const parsed = JSON.parse(saved) as ChatSession[];
-      setSessions(parsed);
-      if (parsed.length > 0) {
-        setCurrentId(parsed[0].id);
-      }
-    }
-  }, []);
-
-  // セッション保存
-  useEffect(() => {
-    localStorage.setItem("chat_sessions", JSON.stringify(sessions));
-  }, [sessions]);
-
-  // 新規セッション作成
-  const createNewSession = () => {
-    const newSession: ChatSession = {
-      id: crypto.randomUUID(),
-      title: "New Chat",
-      messages: [],
-      createdAt: Date.now(),
-    };
-    setSessions((prev) => [...prev, newSession]);
-    setCurrentId(newSession.id);
-  };
-
-   // メッセージ追加
-  const addMessage = (sessionId: string, msg: ChatMessage) => {
-    setSessions((prev) =>
-      prev.map((s) =>
-        s.id === sessionId
-          ? { ...s, messages: [...s.messages, msg], title: s.title || msg.message.slice(0, 10) }
-          : s
-      )
-    );
-  };
-
-  const currentSession = sessions.find((s) => s.id === currentId);
 
   return (
     <div className="flex h-full w-full">

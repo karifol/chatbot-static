@@ -2,9 +2,9 @@
 import { useState, useRef } from 'react';
 import { Textarea } from "@/components/Textarea";
 import { Button } from '@/components/ui/button';
-import { LoaderCircle, Send } from 'lucide-react';
 import { ChatMessage } from '@/lib/types';
 import { callChatApiStream } from '@/lib/chatApi';
+import { LoaderCircle, Send } from 'lucide-react';
 
 const ChatForm = ({
   messageList,
@@ -33,14 +33,28 @@ const ChatForm = ({
     // ユーザーメッセージ + 空のAIメッセージを追加
     setMessageList((prev) => [
       ...prev,
-      { message, user: "user" },
-      { "message": "", user: "assistant" }
+      {
+        user: "user",
+        message: message,
+        tool_name: "",
+        tool_input: "",
+        tool_response: "",
+        tool_id: ""
+      },
+      {
+        "user": "assistant",
+        "message": "",
+        "tool_name": "",
+        "tool_input": "",
+        "tool_response": "",
+        "tool_id": ""
+      }
     ]);
 
     try {
       // 履歴を生成（system/toolは除外）
       const history = messageList
-        .filter(m => m.user !== "tool")
+        .filter(m => m.user !== "tool_start" && m.user !== "tool_end")
         .map(m => ({
           role: m.user === "user" ? "user" : "assistant",
           content: m.message
@@ -64,30 +78,45 @@ const ChatForm = ({
               case "token":
                 newList[realIndex] = {
                   ...newList[realIndex],
-                  message: newList[realIndex].message + event.content
+                  message: newList[realIndex].message + event.content,
+                  user: "assistant",
+                  tool_input: "",
+                  tool_name: "",
+                  tool_response: "",
+                  tool_id: ""
                 };
                 break;
 
               case "tool_start":
+                // 構造化して格納
                 newList.splice(realIndex, 0, {
-                  message: `ツール開始: ${event.tool}`,
-                  user: "tool"
+                  user: "tool_start",
+                  message: '',
+                  tool_name: event.tool_name,
+                  tool_input: event.tool_input,
+                  tool_response: event.tool_response,
+                  tool_id: event.tool_id
                 });
                 break;
 
               case "tool_end":
+                // 構造化して格納
                 newList.splice(realIndex, 0, {
-                  message: `ツール終了: ${event.tool} → ${event.content}`,
-                  user: "tool"
+                  user: "tool_end",
+                  message: '',
+                  tool_name: event.tool_name,
+                  tool_input: "",
+                  tool_response: event.tool_response,
+                  tool_id: event.tool_id
                 });
                 break;
 
-              case "final":
-                newList[realIndex] = {
-                  message: event.content,
-                  user: "assistant"
-                };
-                break;
+              // case "final":
+              //   newList[realIndex] = {
+              //     message: event.content,
+              //     user: "assistant"
+              //   };
+              //   break;
             }
 
             return newList;
@@ -95,10 +124,16 @@ const ChatForm = ({
         }
       );
     } catch (error) {
-      console.error(error);
       setMessageList((prev) => [
         ...prev,
-        { message: "⚠️ エラーが発生しました", user: "assistant" }
+        {
+          user: "assistant",
+          message: "エラーが発生しました。時間をおいて再度お試しください。",
+          tool_name: "",
+          tool_input: "",
+          tool_response: "",
+          tool_id: ""
+        }
       ]);
     } finally {
       setIsSubmitting(false);

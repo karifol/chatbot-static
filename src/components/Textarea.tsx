@@ -1,5 +1,3 @@
-import React from "react"
-
 function Textarea({ ...props }: React.ComponentProps<"textarea">) {
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.target.style.height = "auto"
