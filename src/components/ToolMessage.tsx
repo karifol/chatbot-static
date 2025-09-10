@@ -1,3 +1,44 @@
+// JSONのキーとバリューを色分けして再帰的に表示する関数
+const renderJsonColored = (data: any, indent = 0) => {
+  if (typeof data === 'object' && data !== null) {
+    if (Array.isArray(data)) {
+      return (
+        <>
+          {'['}<br />
+          {data.map((item, idx) => (
+            <div key={idx} style={{ paddingLeft: 16 * (indent + 1) }}>
+              {renderJsonColored(item, indent + 1)}{idx < data.length - 1 ? ',' : ''}
+            </div>
+          ))}
+          {']'}
+        </>
+      );
+    } else {
+      return (
+        <>
+          {'{'}<br />
+          {Object.entries(data).map(([key, value], idx, arr) => (
+            <div key={key} style={{ paddingLeft: 16 * (indent + 1) }}>
+              <span style={{ color: '#2563eb' }}>&quot;{key}&quot;</span>
+              <span style={{ color: '#64748b' }}>: </span>
+              {typeof value === 'object' && value !== null
+                ? renderJsonColored(value, indent + 1)
+                : <span style={{ color: typeof value === 'string' ? '#059669' : typeof value === 'number' ? '#a21caf' : '#111827' }}>
+                    {JSON.stringify(value)}
+                  </span>
+              }
+              {idx < arr.length - 1 ? <span style={{ color: '#64748b' }}>,</span> : null}
+            </div>
+          ))}
+          {'}'}
+        </>
+      );
+    }
+  } else {
+    // プリミティブ型
+    return <span style={{ color: typeof data === 'string' ? '#059669' : typeof data === 'number' ? '#a21caf' : '#111827' }}>{JSON.stringify(data)}</span>;
+  }
+};
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
@@ -33,20 +74,24 @@ const ToolMessage = (
         )}
       </div>
       { isOpen ? (
-        <>
+        <div className="max-h-100 overflow-y-auto w-full">
           <div className="mb-2 w-full">
             <div className="text-sm font-semibold">リクエスト</div>
             <pre className="text-xs rounded-md p-2 w-full overflow-x-auto bg-white">
-              {typeof parsedInput === 'object' ? JSON.stringify(parsedInput, null, 2) : parsedInput}
+              {typeof parsedInput === 'object' && parsedInput !== null
+                ? renderJsonColored(parsedInput)
+                : parsedInput}
             </pre>
           </div>
           <div className="mb-2 w-full">
             <div className="text-sm font-semibold">レスポンス</div>
             <pre className="text-xs rounded-md p-2 w-full overflow-x-auto bg-white">
-              {typeof parsedResponse === 'object' ? JSON.stringify(parsedResponse, null, 2) : parsedResponse}
+              {typeof parsedResponse === 'object' && parsedResponse !== null
+                ? renderJsonColored(parsedResponse)
+                : parsedResponse}
             </pre>
           </div>
-          </>
+          </div>
         ) : (
             <></>
         )
