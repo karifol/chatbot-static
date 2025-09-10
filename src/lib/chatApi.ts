@@ -16,7 +16,7 @@ export type StreamEvent =
   | { type: "final"; content: string }
   | { type: "end" };
 
-// const CHATBOT_ENDPOINT = "https://qbevnlpi6m6clekmykiirqbngy0thisi.lambda-url.ap-northeast-1.on.aws/chat";
+// const CHATBOT_ENDPOINT = "";
 const CHATBOT_ENDPOINT = "http://localhost:8080/chat"; // for local test
 
 /**
