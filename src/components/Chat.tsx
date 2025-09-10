@@ -56,7 +56,7 @@ const Chat = (
         <div className="relative h-full flex justify-center">
           {/* チャット内容エリア */}
           <div
-            className="pb-20 p-4 overflow-auto h-[calc(100vh-5rem)] w-200"
+            className="pb-20 p-4 overflow-auto h-[calc(100vh-5rem)] w-250"
             ref={messagesEndRef}
           >
             {/* チャットメッセージ一覧 */}
@@ -72,7 +72,7 @@ const Chat = (
             ))}
           </div>
           {/* フォームを下部中央に固定 */}
-          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-white w-200">
+          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-white w-250">
             <ChatForm
               messageList={newMessageList}
               setMessageList={setMessageList}

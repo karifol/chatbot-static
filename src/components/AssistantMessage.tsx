@@ -13,7 +13,7 @@ const AssistantMessage = ({ message }: { message: string }) => {
         <RiRobot3Line className="text-3xl" />
       </div>
       {/* メッセージ */}
-      <div className="markdown-body w-[calc(100%-3rem)]">
+      <div className="markdown-body w-[calc(100%-5rem)]">
         {message === "" ? (
           <div className="flex items-center gap-2 py-4">
             <LoaderCircle className="animate-spin text-gray-400 mr-2" />
