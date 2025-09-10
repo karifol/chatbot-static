@@ -64,38 +64,39 @@ const ToolMessage = (
       <div className="flex items-start w-full">
         <div className="text-xl font-bold mb-2">{tool_name}</div>
         { isOpen ? (
-          <Button className="ml-auto" size="sm" variant="outline" onClick={() => setIsOpen(false)}>
+          <Button className="ml-auto bg-gray-100 text-gray-800 hover:bg-white hover:cursor-pointer" size="sm" variant="outline" onClick={() => setIsOpen(false)}>
             <IoIosArrowUp />
           </Button>
         ) : (
-          <Button className="ml-auto" size="sm" variant="outline" onClick={() => setIsOpen(true)}>
+          <Button className="ml-auto bg-gray-100 text-gray-800 hover:bg-white hover:cursor-pointer" size="sm" onClick={() => setIsOpen(true)}>
             <IoIosArrowDown />
           </Button>
         )}
       </div>
-      { isOpen ? (
-        <div className="max-h-100 overflow-y-auto w-full">
-          <div className="mb-2 w-full">
-            <div className="text-sm font-semibold">リクエスト</div>
-            <pre className="text-xs rounded-md p-2 w-full overflow-x-auto bg-white">
-              {typeof parsedInput === 'object' && parsedInput !== null
-                ? renderJsonColored(parsedInput)
-                : parsedInput}
-            </pre>
-          </div>
-          <div className="mb-2 w-full">
-            <div className="text-sm font-semibold">レスポンス</div>
-            <pre className="text-xs rounded-md p-2 w-full overflow-x-auto bg-white">
-              {typeof parsedResponse === 'object' && parsedResponse !== null
-                ? renderJsonColored(parsedResponse)
-                : parsedResponse}
-            </pre>
-          </div>
-          </div>
-        ) : (
-            <></>
-        )
-      }
+      <div
+        className={`transition-all duration-300 overflow-y-auto w-full ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}
+        style={{
+          // もしTailwindのmax-hが足りなければstyleで調整
+          // maxHeight: isOpen ? 500 : 0,
+        }}
+      >
+        <div className="mb-2 w-full">
+          <div className="text-sm font-semibold">リクエスト</div>
+          <pre className="text-xs rounded-md p-2 w-full overflow-x-auto bg-white">
+            {typeof parsedInput === 'object' && parsedInput !== null
+              ? renderJsonColored(parsedInput)
+              : parsedInput}
+          </pre>
+        </div>
+        <div className="mb-2 w-full">
+          <div className="text-sm font-semibold">レスポンス</div>
+          <pre className="text-xs rounded-md p-2 w-full overflow-x-auto bg-white">
+            {typeof parsedResponse === 'object' && parsedResponse !== null
+              ? renderJsonColored(parsedResponse)
+              : parsedResponse}
+          </pre>
+        </div>
+      </div>
     </div>
   );
 };
