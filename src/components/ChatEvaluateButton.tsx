@@ -3,7 +3,7 @@ import { FiThumbsUp } from "react-icons/fi";
 import { FiThumbsDown } from "react-icons/fi";
 
 const ChatEvaluateButton = () => {
-  const [feedback, setFeedback] = useState<"good" | "bad" | null>(null);
+  const [, setFeedback] = useState<"good" | "bad" | null>(null);
   const [hovered, setHovered] = useState<"good" | "bad" | null>(null);
 
   return (

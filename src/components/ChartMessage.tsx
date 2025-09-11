@@ -28,8 +28,8 @@ ChartJS.register(
 interface ChartMessageProps {
   chart: {
     chartType: "bar" | "line" | "pie";
-    data: any;
-    options: any;
+    data: unknown;
+    options: unknown;
   };
 }
 

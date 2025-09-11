@@ -1,5 +1,5 @@
 // JSONのキーとバリューを色分けして再帰的に表示する関数
-const renderJsonColored = (data: any, indent = 0) => {
+const renderJsonColored = (data: unknown, indent = 0) => {
   if (typeof data === 'object' && data !== null) {
     if (Array.isArray(data)) {
       return (
@@ -48,14 +48,14 @@ const ToolMessage = (
   {tool_name: string; tool_input: string; tool_response: string}
 ) => {
 
-  let parsedInput: any = tool_input;
-  let parsedResponse: any = tool_response;
+  let parsedInput: unknown = tool_input;
+  let parsedResponse: unknown = tool_response;
   try {
     parsedInput = JSON.parse(tool_input);
-  } catch (e) {}
+  } catch {}
   try {
     parsedResponse = JSON.parse(tool_response);
-  } catch (e) {}
+  } catch {}
 
   const [isOpen , setIsOpen] = useState(false);
 
@@ -85,7 +85,7 @@ const ToolMessage = (
           <pre className="text-xs rounded-md p-2 w-full overflow-x-auto bg-white">
             {typeof parsedInput === 'object' && parsedInput !== null
               ? renderJsonColored(parsedInput)
-              : parsedInput}
+              : String(parsedInput)}
           </pre>
         </div>
         <div className="mb-2 w-full">
@@ -93,7 +93,7 @@ const ToolMessage = (
           <pre className="text-xs rounded-md p-2 w-full overflow-x-auto bg-white">
             {typeof parsedResponse === 'object' && parsedResponse !== null
               ? renderJsonColored(parsedResponse)
-              : parsedResponse}
+              : String(parsedResponse)}
           </pre>
         </div>
       </div>

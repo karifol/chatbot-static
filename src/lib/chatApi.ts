@@ -58,7 +58,7 @@ export async function callChatApiStream(
     if (done) break;
 
     buffer += decoder.decode(value, { stream: true });
-    let lines = buffer.split("\n");
+    const lines = buffer.split("\n");
 
     // 最後の行が未完了の場合はバッファに残す
     buffer = lines.pop() ?? "";

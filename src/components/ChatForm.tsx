@@ -144,7 +144,7 @@ const ChatForm = ({
           });
         }
       );
-    } catch (error) {
+    } catch  {
       setMessageList((prev) => [
         ...prev,
         {
