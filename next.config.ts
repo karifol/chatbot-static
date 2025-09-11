@@ -3,8 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "export",
   images: {
-    unoptimized: true, // ここを追加して画像最適化を無効にする
+    unoptimized: true,
   },
+  // basePath: '/chat', // 静的サイトホスティングでサブディレクトリに配置する場合に使用
 };
 
 export default nextConfig;

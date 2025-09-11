@@ -3,7 +3,6 @@ import AssistantMessage from './AssistantMessage';
 import SystemMessage from './SystemMessage';
 import ToolMessage from './ToolMessage';
 import ChartMessage from './ChartMessage';
-import { text } from 'stream/consumers';
 
 const ChatMessage = ({ message, user, tool_name, tool_input, tool_response, chart}:
   { message: string; user: string; tool_name: string; tool_input: string | object; tool_response: string | object; chart: string | object | undefined }
