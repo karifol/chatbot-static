@@ -4,13 +4,12 @@ import ChatForm from "@/components/ChatForm";
 import ChatMessage from "@/components/ChatMessage";
 import InitialChat from "@/components/InitialChat";
 import Header from "@/components/Header";
-import { ChatMessage as ChatMessageType, ChatRawMessage } from "@/lib/types";
+import { ChatMessage as ChatMessageType } from "@/lib/types";
 
 const Chat = (
-  { messageList, setMessageList, setRawMessage }: {
+  { messageList, setMessageList }: {
     messageList: ChatMessageType[];
     setMessageList: React.Dispatch<React.SetStateAction<ChatMessageType[]>>;
-    setRawMessage: React.Dispatch<React.SetStateAction<ChatRawMessage>>;
   }
 ) => {
 
@@ -92,7 +91,6 @@ const Chat = (
     <InitialChat
       messageList={messageList}
       setMessageList={setMessageList}
-      setRawMessage={setRawMessage}
     />
   )
 };
