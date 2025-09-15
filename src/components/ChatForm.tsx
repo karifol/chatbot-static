@@ -131,15 +131,7 @@ const ChatForm = ({
                   tool_id: ""
                 });
                 break;
-
-              // case "final":
-              //   newList[realIndex] = {
-              //     message: event.content,
-              //     user: "assistant"
-              //   };
-              //   break;
             }
-
             return newList;
           });
         }
@@ -161,13 +153,6 @@ const ChatForm = ({
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
-  };
-
   return (
     <div className="p-3 w-full min-h-20">
       <div className="flex justify-between items-center gap-2 rounded-4xl p-2 border border-gray-300 shadow-sm">
@@ -176,7 +161,6 @@ const ChatForm = ({
           placeholder="メッセージを入力して下さい..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
           disabled={isSubmitting}
           rows={1}
         />
