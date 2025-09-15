@@ -1,3 +1,5 @@
+import { ChatMessage } from "./types";
+
 export type StreamEvent =
   | { type: "token"; content: string }
   | {
@@ -67,6 +69,7 @@ export async function callChatApiStream(
       if (line.startsWith("data: ")) {
         try {
           const data = JSON.parse(line.replace("data: ", ""));
+          // console.log("Received event:", data);
           onEvent(data);
         } catch (err) {
           console.error("JSON parse error:", err, line);
@@ -74,4 +77,89 @@ export async function callChatApiStream(
       }
     }
   }
+}
+
+
+// 生成AIからのメッセージを使ってmessageListを更新する
+export function updateMessageListWithAIResponse(
+  messageList: ChatMessage[],
+  responseList: StreamEvent[] | StreamEvent
+): ChatMessage[] {
+  let newList = [...messageList];
+
+  for (const rawMessage of Array.isArray(responseList) ? responseList : [responseList]) {
+    // ----------------------------
+    // AIからのメッセージ
+    // ----------------------------
+    if (rawMessage.type === "token" && rawMessage.content) {
+      // rawMessageが最初のAIからのメッセージならケツに追加する
+      // 判断基準はmassgeeListの最後のメッセージがuserかどうか
+      let isStart = true;
+      const lastMessage = newList[newList.length - 1];
+      if (lastMessage.user === "assistant") {
+        isStart = false;
+      }
+
+      // 最初のメッセージならケツに箱を用意する
+      if (isStart) {
+        newList = [
+          ...newList,
+          {
+            user: "assistant",
+            message: rawMessage.content,
+            tool_name: "",
+            tool_input: "",
+            tool_response: "",
+            tool_id: ""
+          }
+        ];
+      }
+      // 最初のメッセージでなければケツのメッセージを更新する
+      else {
+        newList = newList.map((msg, idx) => {
+          if (idx === newList.length - 1) {
+            return {
+              ...msg,
+              message: msg.message + rawMessage.content
+            };
+          }
+          return msg;
+        });
+      }
+    }
+
+    // ----------------------------
+    // ツール開始
+    // ----------------------------
+    else if (rawMessage.type === "tool_start") {
+      newList = [
+        ...newList,
+        {
+          user: "tool_start",
+          message: `ツール ${rawMessage.tool_name} を実行中...`,
+          tool_name: rawMessage.tool_name || "",
+          tool_input: rawMessage.tool_input || "",
+          tool_response: "",
+          tool_id: rawMessage.tool_id || ""
+        }
+      ];
+    }
+
+    // ----------------------------
+    // ツール終了
+    // ----------------------------
+    else if (rawMessage.type === "tool_end") {
+      newList = newList.map((msg) => {
+        if (msg.user === "tool_start" && msg.tool_id === rawMessage.tool_id) {
+          return {
+            ...msg,
+            tool_response: rawMessage.tool_response || ""
+          };
+        }
+        return msg;
+      });
+    }
+  }
+
+  return newList;
 }

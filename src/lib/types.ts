@@ -10,6 +10,16 @@ export interface ChatMessage {
   tool_id: string;
 }
 
+export interface ChatRawMessage {
+  type: string;
+  content: string;
+  tool_name?: string;
+  tool_input?: string;
+  tool_response?: string;
+  tool_id?: string;
+  chart?: string | object;
+}
+
 // チャットセッション
 export interface ChatSession {
   id: string;

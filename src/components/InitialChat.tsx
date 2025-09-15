@@ -1,38 +1,61 @@
 import React from 'react'
-import TitleLogo from './TitleLogo'
-import ChatForm from './ChatForm'
+import TitleLogo from '@/components/TitleLogo'
+import ChatForm from '@/components/ChatForm'
+import ChatSuggest from '@/components/ChatSuggest'
+import Header from '@/components/Header'
 import { ChatMessage } from '@/lib/types'
-import ChatSuggest from './ChatSuggest';
-import Header from './Header';
+import { callChatApiStream, StreamEvent, updateMessageListWithAIResponse } from '@/lib/chatApi';
 
 const InitialChat = (
   { messageList, setMessageList }:
-  { messageList: ChatMessage[]; setMessageList: React.Dispatch<React.SetStateAction<ChatMessage[]>> }
+  {
+    messageList: ChatMessage[];
+    setMessageList: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
+  }
 ) => {
 
   // サジェストクリック時のAPI呼び出し
   const handleSuggestClick = async (text: string) => {
-    // ユーザーメッセージ追加
-    setMessageList(prev => [...prev, { message: text, user: "user", tool_name: "", tool_input: "", tool_response: "", tool_id: "" }]);
-    // API呼び出し
-    const messages = [
-      ...messageList.map(m => ({ role: m.user, content: m.message })),
-      { role: "user", content: text }
-    ];
-    // 一時的にローディングメッセージ追加
-    setMessageList(prev => [...prev, { message: "", user: "assistant", loading: true, tool_name: "", tool_input: "", tool_response: "", tool_id: "" }]);
-    let assistantMessage = "";
-    const { callChatApiStream } = await import("@/lib/chatApi");
-    await callChatApiStream(messages, (event) => {
-      if (event.type === "token" || event.type === "final") {
-        assistantMessage += event.content;
-        setMessageList(prev => {
-          // 最後のassistant(loading)を置き換え
-          const updated = [...prev];
-          updated[updated.length - 1] = { message: assistantMessage, user: "assistant", loading: false, tool_name: "", tool_input: "", tool_response: "", tool_id: "" };
-          return updated;
-        });
+
+    // ユーザーメッセージを追加
+    // ページが更新される
+    setMessageList(prev => [
+      ...prev,
+      {
+        user: "user",
+        message: text,
+        tool_name: "",
+        tool_input: "",
+        tool_response: "",
+        tool_id: ""
       }
+    ]);
+    messageList.push({
+      user: "user",
+      message: text,
+      tool_name: "",
+      tool_input: "",
+      tool_response: "",
+      tool_id: ""
+    });
+
+    // チャットAPIを呼び出す
+    const messages = [];
+    for (const msg of messageList) {
+      if (msg.user !== "user" && msg.user !== "assistant" && msg.user !== "system") {
+        continue;
+      }
+      messages.push({
+        role: msg.user,
+        content: msg.message
+      });
+    }
+
+    const responseList: StreamEvent[] = [];
+    await callChatApiStream(messages, (event) => {
+      responseList.push(event);
+      const newList = updateMessageListWithAIResponse(messageList, responseList);
+      setMessageList(newList);
     });
   };
 

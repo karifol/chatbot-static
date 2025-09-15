@@ -3,154 +3,74 @@ import { useState, useRef } from 'react';
 import { Textarea } from "@/components/Textarea";
 import { Button } from '@/components/ui/button';
 import { ChatMessage } from '@/lib/types';
-import { callChatApiStream } from '@/lib/chatApi';
+import { callChatApiStream, updateMessageListWithAIResponse, StreamEvent } from '@/lib/chatApi';
 import { LoaderCircle, Send } from 'lucide-react';
 
 const ChatForm = ({
-  messageList,
-  setMessageList
+  messageList, setMessageList
 }: {
   messageList: ChatMessage[];
   setMessageList: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
 }) => {
+
   const [input, setInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSend = async () => {
     if (isSubmitting) return;
-    const message = input.trim();
-    if (!message) return;
+    const text = input.trim();
+    if (!text) return;
 
     setIsSubmitting(true);
     setInput("");
     // TextAreaの高さをリセット
     if (textareaRef.current) {
       textareaRef.current.rows = 1;
-      textareaRef.current.style.height = ""; // 自動リサイズ対応の場合
+      textareaRef.current.style.height = "";
     }
 
-    // ユーザーメッセージ + 空のAIメッセージを追加
-    setMessageList((prev) => [
+    // ユーザーメッセージを追加
+    // ページが更新される
+    setMessageList(prev => [
       ...prev,
       {
         user: "user",
-        message: message,
+        message: text,
         tool_name: "",
         tool_input: "",
         tool_response: "",
         tool_id: ""
-      },
-      {
-        "user": "assistant",
-        "message": "",
-        "tool_name": "",
-        "tool_input": "",
-        "tool_response": "",
-        "tool_id": ""
       }
     ]);
+    messageList.push({
+      user: "user",
+      message: text,
+      tool_name: "",
+      tool_input: "",
+      tool_response: "",
+      tool_id: ""
+    });
 
-    try {
-      // 履歴を生成（system/toolは除外）
-      const history = messageList
-        .filter(m => m.user !== "tool_start" && m.user !== "tool_end" && m.user !== "chart")
-        .map(m => ({
-          role: m.user === "user" ? "user" : "assistant",
-          content: m.message
-        }));
-
-      await callChatApiStream(
-        [...history, { role: "user", content: message }],
-        (event) => {
-          setMessageList((prev) => {
-            const newList = [...prev];
-
-            // 最後に追加された assistant を対象にする
-            const aiIndex = [...newList].reverse().findIndex(
-              (m) => m.user === "assistant"
-            );
-            const realIndex =
-              aiIndex === -1 ? -1 : newList.length - 1 - aiIndex;
-            if (realIndex < 0) return newList;
-
-            switch (event.type) {
-              case "token":
-                newList[realIndex] = {
-                  ...newList[realIndex],
-                  message: newList[realIndex].message + event.content,
-                  user: "assistant",
-                  tool_input: "",
-                  tool_name: "",
-                  tool_response: "",
-                  tool_id: ""
-                };
-                break;
-
-              case "tool_start":
-                // 構造化して格納
-                newList.splice(realIndex, 0, {
-                  user: "tool_start",
-                  message: '',
-                  tool_name: event.tool_name,
-                  tool_input: event.tool_input,
-                  tool_response: event.tool_response,
-                  tool_id: event.tool_id
-                });
-                break;
-
-              case "tool_end":
-                // 構造化して格納
-                newList.splice(realIndex, 0, {
-                  user: "tool_end",
-                  message: '',
-                  tool_name: event.tool_name,
-                  tool_input: "",
-                  tool_response: event.tool_response,
-                  tool_id: event.tool_id
-                });
-                break;
-
-              case "chart":
-                // tool_endとchartを連続で格納
-                newList.splice(realIndex, 0, {
-                  user: "tool_end",
-                  message: '',
-                  tool_name: event.tool_name,
-                  tool_input: "",
-                  tool_response: event.tool_response,
-                  tool_id: event.tool_id
-                });
-                newList.splice(realIndex + 1, 0, {
-                  user: "chart",
-                  message: '',
-                  chart: event.chart,
-                  tool_name: "",
-                  tool_input: "",
-                  tool_response: "",
-                  tool_id: ""
-                });
-                break;
-            }
-            return newList;
-          });
-        }
-      );
-    } catch  {
-      setMessageList((prev) => [
-        ...prev,
-        {
-          user: "assistant",
-          message: "エラーが発生しました。時間をおいて再度お試しください。",
-          tool_name: "",
-          tool_input: "",
-          tool_response: "",
-          tool_id: ""
-        }
-      ]);
-    } finally {
-      setIsSubmitting(false);
+    // チャットAPIを呼び出す
+    const messages = [];
+    for (const msg of messageList) {
+      if (msg.user !== "user" && msg.user !== "assistant" && msg.user !== "system") {
+        continue;
+      }
+      messages.push({
+        role: msg.user,
+        content: msg.message
+      });
     }
+
+    const responseList: StreamEvent[] = [];
+    await callChatApiStream(messages, (event) => {
+      responseList.push(event);
+      const newList = updateMessageListWithAIResponse(messageList, responseList);
+      setMessageList(newList);
+    });
+    setIsSubmitting(false);
   };
 
   return (

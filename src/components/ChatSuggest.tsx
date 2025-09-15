@@ -4,7 +4,7 @@ interface ChatSuggestProps {
 
 const SUGGESTS = [
   "使い方を教えてください",
-  "明日の天気は？",
+  "明日の千葉市の天気は？1kmメッシュで答えて",
   "ツール一覧を見せて",
 ];
 
