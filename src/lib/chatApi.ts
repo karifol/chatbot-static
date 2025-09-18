@@ -15,15 +15,6 @@ export type StreamEvent =
     tool_response: string;
     tool_id: string;
   }
-  | {
-    type: "chart";
-    tool_name: string;
-    tool_response: string;
-    tool_id: string;
-    chart: string | object;
-  }
-  | { type: "final"; content: string }
-  | { type: "end" };
 
 // const CHATBOT_ENDPOINT = "http://13.158.134.151:80/chat"; // for local test
 const CHATBOT_ENDPOINT = "http://localhost:8080/chat"; // for local test
