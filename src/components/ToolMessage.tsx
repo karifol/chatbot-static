@@ -1,3 +1,8 @@
+import { Button } from "./ui/button";
+import { useState } from "react";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { TiSpanner } from "react-icons/ti";
+
 // JSONのキーとバリューを色分けして再帰的に表示する関数
 const renderJsonColored = (data: unknown, indent = 0) => {
   if (typeof data === 'object' && data !== null) {
@@ -39,9 +44,6 @@ const renderJsonColored = (data: unknown, indent = 0) => {
     return <span style={{ color: typeof data === 'string' ? '#059669' : typeof data === 'number' ? '#a21caf' : '#111827' }}>{JSON.stringify(data)}</span>;
   }
 };
-import { Button } from "./ui/button";
-import { useState } from "react";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 const ToolMessage = (
   {tool_name, tool_input, tool_response}:
@@ -61,8 +63,16 @@ const ToolMessage = (
 
   return (
     <div className="flex flex-col items-start my-2 bg-gray-100 p-2 rounded-md border">
-      <div className="flex items-start w-full">
-        <div className="text-xl font-bold mb-2">{tool_name}</div>
+      <div className="flex items-center justify-center w-full">
+        <TiSpanner className="text-2xl text-blue-500 mr-2 mt-1"/>
+        <div className="text-xl font-bold">{tool_name}</div>
+        {
+          tool_response ? (
+            <div className="ml-4 text-green-600 font-semibold">完了</div>
+          ) : (
+            <div className="ml-4 text-blue-600 font-semibold">実行中...</div>
+          )
+        }
         { isOpen ? (
           <Button className="ml-auto bg-gray-100 text-gray-800 hover:bg-white hover:cursor-pointer" size="sm" variant="outline" onClick={() => setIsOpen(false)}>
             <IoIosArrowUp />
