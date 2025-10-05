@@ -28,6 +28,14 @@ const InitialChat = (
         tool_input: "",
         tool_response: "",
         tool_id: ""
+      },
+      {
+        user: "assistant",
+        message: "",
+        tool_name: "",
+        tool_input: "",
+        tool_response: "",
+        tool_id: ""
       }
     ]);
     messageList.push({

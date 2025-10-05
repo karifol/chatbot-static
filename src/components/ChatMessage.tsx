@@ -2,9 +2,8 @@ import UserMessage from './UserMessage';
 import AssistantMessage from './AssistantMessage';
 import SystemMessage from './SystemMessage';
 import ToolMessage from './ToolMessage';
-import ChartMessage from './ChartMessage';
 
-const ChatMessage = ({ message, user, tool_name, tool_input, tool_response, chart}:
+const ChatMessage = ({ message, user, tool_name, tool_input, tool_response }:
   { message: string; user: string; tool_name: string; tool_input: string | object; tool_response: string | object; chart: string | object | undefined }
 ) => {
 
@@ -21,6 +20,7 @@ const ChatMessage = ({ message, user, tool_name, tool_input, tool_response, char
   }
   if (user === "assistant") {
     return <AssistantMessage message={renderValue(message)} />;
+    // return <AssistantLoadingMessage />;
   }
   if (user === "tool_start") {
     return <ToolMessage
@@ -28,10 +28,6 @@ const ChatMessage = ({ message, user, tool_name, tool_input, tool_response, char
       tool_input={renderValue(tool_input)}
       tool_response={renderValue(tool_response)}
     />;
-  }
-  if (user === "chart") {
-    if (chart === undefined) return null;
-    return <ChartMessage chart={renderValue(chart)} />;
   }
   if (user === "system") {
     return <SystemMessage message={renderValue(message)} />;

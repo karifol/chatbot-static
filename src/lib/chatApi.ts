@@ -1,7 +1,7 @@
 import { ChatMessage } from "./types";
 
 export type StreamEvent =
-  | { type: "token"; content: string }
+  | { type: "token"; content: { text: string }[] }
   | {
     tool_response: string;
     type: "tool_start";
@@ -83,6 +83,7 @@ export function updateMessageListWithAIResponse(
     // AIからのメッセージ
     // ----------------------------
     if (rawMessage.type === "token" && rawMessage.content) {
+      console.log(rawMessage.content);
       // rawMessageが最初のAIからのメッセージならケツに追加する
       // 判断基準はmassgeeListの最後のメッセージがuserかどうか
       let isStart = true;
@@ -97,7 +98,7 @@ export function updateMessageListWithAIResponse(
           ...newList,
           {
             user: "assistant",
-            message: rawMessage.content,
+            message: rawMessage.content[0].text,
             tool_name: "",
             tool_input: "",
             tool_response: "",
@@ -111,7 +112,7 @@ export function updateMessageListWithAIResponse(
           if (idx === newList.length - 1) {
             return {
               ...msg,
-              message: msg.message + rawMessage.content
+              message: msg.message + rawMessage.content[0].text
             };
           }
           return msg;
